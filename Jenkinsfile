@@ -11,7 +11,7 @@ pipeline {
     }
 
     environment {
-        IMAGE_NAME     = 'aniket1805/bankapp'
+        IMAGE_NAME     = 'viveksr602/bankapp'
         TAG            = "${env.BUILD_NUMBER}"  // Unique per build
         KUBE_NAMESPACE = 'webapps'
         SCANNER_HOME   = tool 'sonar-scanner'
