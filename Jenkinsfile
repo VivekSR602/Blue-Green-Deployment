@@ -94,7 +94,7 @@ pipeline {
         stage('Deploy MySQL') {
             steps {
                 script {
-                    withKubeConfig(credentialsId: 'k8-token', serverUrl: 'https://04B156B8E9377A835EC7902A0923ACF5.gr7.us-east-1.eks.amazonaws.com', namespace: "${KUBE_NAMESPACE}") {
+                    withKubeConfig(credentialsId: 'k8-token', serverUrl: 'https://386E74612405AF61D823BB120DCA6C83.gr7.us-east-1.eks.amazonaws.com', namespace: "${KUBE_NAMESPACE}") {
                         sh "kubectl apply -f mysql-ds.yml -n ${KUBE_NAMESPACE}"
                     }
                 }
@@ -104,7 +104,7 @@ pipeline {
         stage('Deploy Service') {
             steps {
                 script {
-                    withKubeConfig(credentialsId: 'k8-token', serverUrl: 'https://04B156B8E9377A835EC7902A0923ACF5.gr7.us-east-1.eks.amazonaws.com', namespace: "${KUBE_NAMESPACE}") {
+                    withKubeConfig(credentialsId: 'k8-token', serverUrl: 'https://386E74612405AF61D823BB120DCA6C83.gr7.us-east-1.eks.amazonaws.com', namespace: "${KUBE_NAMESPACE}") {
                         sh """
                             if ! kubectl get svc bankapp-service -n ${KUBE_NAMESPACE}; then
                                 kubectl apply -f bankapp-service.yml -n ${KUBE_NAMESPACE}
@@ -119,7 +119,7 @@ pipeline {
             steps {
                 script {
                     def deploymentFile = params.DEPLOY_ENV == 'blue' ? 'app-deployment-blue.yml' : 'app-deployment-green.yml'
-                    withKubeConfig(credentialsId: 'k8-token', serverUrl: 'https://04B156B8E9377A835EC7902A0923ACF5.gr7.us-east-1.eks.amazonaws.com', namespace: "${KUBE_NAMESPACE}") {
+                    withKubeConfig(credentialsId: 'k8-token', serverUrl: 'https://386E74612405AF61D823BB120DCA6C83.gr7.us-east-1.eks.amazonaws.com', namespace: "${KUBE_NAMESPACE}") {
                         // Replace image tag dynamically
                         sh """
                             sed -i 's|aniket1805/bankapp:.*|aniket1805/bankapp:${TAG}|g' ${deploymentFile}
@@ -137,7 +137,7 @@ pipeline {
             steps {
                 script {
                     def newEnv = params.DEPLOY_ENV
-                    withKubeConfig(credentialsId: 'k8-token', serverUrl: 'https://04B156B8E9377A835EC7902A0923ACF5.gr7.us-east-1.eks.amazonaws.com', namespace: "${KUBE_NAMESPACE}") {
+                    withKubeConfig(credentialsId: 'k8-token', serverUrl: 'https://386E74612405AF61D823BB120DCA6C83.gr7.us-east-1.eks.amazonaws.com', namespace: "${KUBE_NAMESPACE}") {
                         sh """
                             kubectl patch service bankapp-service -p '{"spec":{"selector":{"app":"bankapp","version":"${newEnv}"}}}' -n ${KUBE_NAMESPACE}
                         """
@@ -151,7 +151,7 @@ pipeline {
             steps {
                 script {
                     def verifyEnv = params.DEPLOY_ENV
-                    withKubeConfig(credentialsId: 'k8-token', serverUrl: 'https://04B156B8E9377A835EC7902A0923ACF5.gr7.us-east-1.eks.amazonaws.com', namespace: "${KUBE_NAMESPACE}") {
+                    withKubeConfig(credentialsId: 'k8-token', serverUrl: 'https://386E74612405AF61D823BB120DCA6C83.gr7.us-east-1.eks.amazonaws.com', namespace: "${KUBE_NAMESPACE}") {
                         sh """
                             kubectl get pods -l version=${verifyEnv} -n ${KUBE_NAMESPACE}
                             kubectl get svc bankapp-service -n ${KUBE_NAMESPACE}
