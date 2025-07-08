@@ -20,7 +20,9 @@ pipeline {
                 checkout scm
             }
         }
-        
+        stage('Compile') { steps { sh 'mvn -B compile' } }
+        stage('Test') { steps { sh 'mvn -B test -DskipTests=true' } }
+        stage('SCA (Trivy FS)') { steps { sh 'trivy fs --format table -o fs.html .' } }
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv('sonar') {
