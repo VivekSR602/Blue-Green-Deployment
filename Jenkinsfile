@@ -122,7 +122,7 @@ pipeline {
                     withKubeConfig(credentialsId: 'k8-token', serverUrl: 'https://386E74612405AF61D823BB120DCA6C83.gr7.us-east-1.eks.amazonaws.com', namespace: "${KUBE_NAMESPACE}") {
                         // Replace image tag dynamically
                         sh """
-                            sed -i 's|aniket1805/bankapp:.*|aniket1805/bankapp:${TAG}|g' ${deploymentFile}
+                            sed -i 's|viveksr602/bankapp:.*|viveksr602/bankapp:${TAG}|g' ${deploymentFile}
                             kubectl apply -f ${deploymentFile} -n ${KUBE_NAMESPACE}
                             kubectl rollout restart deployment bankapp-${params.DEPLOY_ENV} -n ${KUBE_NAMESPACE}
                             kubectl rollout status  deployment bankapp-${params.DEPLOY_ENV} -n ${KUBE_NAMESPACE}
